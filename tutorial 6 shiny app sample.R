@@ -10,10 +10,14 @@
 # RShiny tutorial : https://shiny.rstudio.com/tutorial/
 # RShiny examples : https://shiny.rstudio.com/gallery/
 
+#install.packages("dplyr")
 
 library(shiny)
 library(tseries)
 library(forecast)
+library(dplyr)
+
+
 
 
 # -------------------------------------------------------
@@ -23,6 +27,29 @@ library(forecast)
 # Display the output of target Forecasts in Main Panel
 
 cryptoData <- read.csv("crypto-markets.csv", header = TRUE)
+cryptoData2 <- subset(cryptoData, select = c("symbol", "date", "open", "close"))
+
+Bitcoin <- cryptoData2[grep("BTC", cryptoData2$symbol),]
+Bitcoin
+
+Ethereum <- cryptoData2[grep("ETH", cryptoData2$symbol),]
+Ethereum
+
+XRP <- cryptoData2[grep("XRP", cryptoData2$symbol),]
+XRP
+
+BTCcash <- cryptoData2[grep("BCH", cryptoData2$symbol),]
+BTCcash
+
+LiteCoin <- cryptoData2[grep("LTC", cryptoData2$symbol),]
+LiteCoin
+
+str(cryptoData)
+
+# need to dropdown and choose the type of crypto currency (according to symbol)
+
+cryptoSymbols <- unique(cryptoData2$symbol)
+cryptoSymbols
 
 ui <- fluidPage(
   
@@ -33,11 +60,12 @@ ui <- fluidPage(
   sidebarLayout(
     sidebarPanel(
       selectInput("dataset", "Choose the Dataset",
-                  list("Air Passengers" = "AirPassengers", 
-                       "Australian Wine Sales" = "wineind",
-                       "Box and Jenkins Sales" = "BJsales",
-                       "Johnson-Johnson Shares" = "JohnsonJohnson",
-                       "Crypto-Data" = "cryptoData")),
+                  list("Crypto-Data" = "cryptoData",
+                       "Bitcoin" = "Bitcoin",
+                       "Ethereum" = "Ethereum",
+                       "XRP" = "XRP", 
+                       "Bitcoin Cash" = "BTCcash",
+                       "LiteCoin"= "LiteCoin")),
       numericInput("horizon", "Forecast Horizon (Months)", 24),
       submitButton("Update View")
     ),
