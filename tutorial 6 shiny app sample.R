@@ -15,7 +15,7 @@
 library(shiny)
 library(tseries)
 library(forecast)
-
+    
 # -------------------------------------------------------
 # Define UI for the application (for input parameters)
 #
@@ -24,6 +24,7 @@ library(forecast)
 
 cryptoData <- read.csv("crypto-markets.csv", header = TRUE)
 cryptoData2 <- subset(cryptoData, select = c("symbol", "date", "open", "close"))
+#symbolInt <- as.integer(cryptoData2$symbol)
 cryptoData2 <- as.data.frame.matrix(cryptoData2) 
 
 Bitcoin <- cryptoData2[grep("BTC", cryptoData2$symbol),]
@@ -35,7 +36,6 @@ XRP <- cryptoData2[grep("XRP", cryptoData2$symbol),]
 BTCcash <- cryptoData2[grep("BCH", cryptoData2$symbol),]
 
 LiteCoin <- cryptoData2[grep("LTC", cryptoData2$symbol),]
-
 
 # need to dropdown and choose the type of crypto currency (according to symbol)
 
