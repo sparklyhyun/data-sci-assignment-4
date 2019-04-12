@@ -50,9 +50,11 @@ plot(BitcoinTimeSeries)
 
 
 ```{r}
-trainBitcoin<- window(BitcoinTimeSeries, start = c(2014,1), end= c(2016,10), frequency=365)
-testBitcoin<- window(BitcoinTimeSeries, start=c(2016,11))
+trainBitcoin<- ts(BitcoinTimeSeries, start = c(2014,11), end= c(2016,10), frequency=30)
+testBitcoin<- ts(BitcoinTimeSeries, start=c(2016,11), end = c(2016, 12), frequency = 30)
 
+rm(trainBitcoin)
+rm(testBitcoin)
 
 trainBitcoin
 plot(trainBitcoin)
