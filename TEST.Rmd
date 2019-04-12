@@ -22,6 +22,9 @@ head(cryptoDataTimeSeries)
 tail(cryptoDataTimeSeries)
 
 Bitcoin <- cryptoData2[grep("BTC", cryptoData2$symbol),]
+write.csv(Bitcoin, "bitcoin.csv")
+Bitcoin <- read.csv("bitcoin.csv", header = TRUE)
+
 head(Bitcoin)
 BitcoinTimeSeries<-ts(Bitcoin, frequency=365, start=c(2014,1), end=c(2016,12))
 #BitcoinTimeSeries<- as.ts(Bitcoin)
@@ -30,9 +33,17 @@ tail(BitcoinTimeSeries)
 str(BitcoinTimeSeries)
 plot(BitcoinTimeSeries)
 #Ethereum <- cryptoData2[grep("ETH", cryptoData2$symbol),]
+#write.csv(Ethereum, "ethereum.csv")
+#Ethereum <- read.csv("ethereum.csv", header = TRUE)
 #XRP <- cryptoData2[grep("XRP", cryptoData2$symbol),]
+#write.csv(XRP, "xrp.csv")
+#XRP <- read.csv("xrp.csv", header = TRUE)
 #BTCcash <- cryptoData2[grep("BCH", cryptoData2$symbol),]
+#write.csv(BTCcash, "bch.csv")
+#BTCcash <- read.csv("bch.csv", header = TRUE)
 #LiteCoin <- cryptoData2[grep("LTC", cryptoData2$symbol),]
+#write.csv(LiteCoin, "litecoin.csv")
+#LiteCoin <- read.csv("litecoin.csv", header = TRUE)
 #str(cryptoData) 
 ```
 
