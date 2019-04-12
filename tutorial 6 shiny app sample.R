@@ -30,26 +30,13 @@ cryptoData <- read.csv("crypto-markets.csv", header = TRUE)
 cryptoData2 <- subset(cryptoData, select = c("symbol", "date", "open", "close"))
 
 Bitcoin <- cryptoData2[grep("BTC", cryptoData2$symbol),]
-Bitcoin
-
 Ethereum <- cryptoData2[grep("ETH", cryptoData2$symbol),]
-Ethereum
-
 XRP <- cryptoData2[grep("XRP", cryptoData2$symbol),]
-XRP
-
 BTCcash <- cryptoData2[grep("BCH", cryptoData2$symbol),]
-BTCcash
-
 LiteCoin <- cryptoData2[grep("LTC", cryptoData2$symbol),]
-LiteCoin
-
 str(cryptoData)
 
 # need to dropdown and choose the type of crypto currency (according to symbol)
-
-cryptoSymbols <- unique(cryptoData2$symbol)
-cryptoSymbols
 
 ui <- fluidPage(
   
@@ -93,10 +80,11 @@ server <- function(input, output) {
 
   # Get the dataset chosen by the user
   getDataset <- reactive({
-    if (input$dataset == "AirPassengers") { return(AirPassengers) }
-    else if (input$dataset == "wineind") { return(wineind) }
-    else if (input$dataset == "BJsales") { return(BJsales) }
-    else { return(JohnsonJohnson) } 
+    if (input$dataset == "Bitcoin") { return(Bitcoin) }
+    else if (input$dataset == "Ethereum") { return(Ethereum) }
+    else if (input$dataset == "XRP") { return(XRP) }
+    else if (input$dataset == "BTCcash") {return(BTCcash)}
+    else { return(LiteCoin) } 
   })
   
   # Record the input forecast horizon
