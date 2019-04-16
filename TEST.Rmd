@@ -26,7 +26,17 @@ write.csv(Bitcoin, "bitcoin.csv")
 Bitcoin <- read.csv("bitcoin.csv", header = TRUE)
 
 head(Bitcoin)
-BitcoinTimeSeries<-ts(Bitcoin, frequency=365, start=c(2014,1), end=c(2016,12))
+Bitcoin
+class(Bitcoin$date)
+Bitcoin$date2 <- as.Date(Bitcoin$date, "%d-%m-%y")
+class(Bitcoin$date2)
+
+BitcoinTimeSeries<-ts(Bitcoin, frequency=365, start=c(2013,28), end=c(2018,11,29))
+
+
+#Bitcoin2 <- subset(Bitcoin, date2 > "2014-8-31" & date2 < "2016-9-1")
+
+
 #BitcoinTimeSeries<- as.ts(Bitcoin)
 BitcoinTimeSeries
 tail(BitcoinTimeSeries)
@@ -50,8 +60,8 @@ plot(BitcoinTimeSeries)
 
 
 ```{r}
-trainBitcoin<- ts(BitcoinTimeSeries, start = c(2014,11), end= c(2016,10), frequency=30)
-testBitcoin<- ts(BitcoinTimeSeries, start=c(2016,11), end = c(2016, 12), frequency = 30)
+trainBitcoin<- window(BitcoinTimeSeries, start = c(2014,1), end= c(2016,1), frequency=365)
+testBitcoin<- window(BitcoinTimeSeries, start=c(2016,11), end = c(2016, 12), frequency = 365)
 
 rm(trainBitcoin)
 rm(testBitcoin)
