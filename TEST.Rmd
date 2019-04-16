@@ -8,7 +8,6 @@ This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute
 Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
 
 ```{r}
-
 library(tseries)
 library(forecast)
 cryptoData <- read.csv("crypto-markets.csv", header = TRUE)
@@ -20,25 +19,20 @@ cryptoDataTimeSeries
 str(cryptoDataTimeSeries)
 head(cryptoDataTimeSeries)
 tail(cryptoDataTimeSeries)
-
-Bitcoin <- subset(cryptoData2, symbol =="BTC" & date >= "2014-10-29" & date <= "2016-10-29")
+Bitcoin <- subset(cryptoData2, symbol =="BTC" & date >= "2014-01-01" & date <= "2016-10-31")
 write.csv(Bitcoin, "bitcoin.csv")
 Bitcoin <- read.csv("bitcoin.csv", header = TRUE)
-
 head(Bitcoin)
-Bitcoin
-
+str(Bitcoin)
+plot(Bitcoin$close)
 #class(Bitcoin$date)
 #Bitcoin$date2 <- as.Date(Bitcoin$date, "%d-%m-%y")
 #class(Bitcoin$date2)
-
 BitcoinTimeSeries<-ts(Bitcoin$open, start=c(2014,1), end=c(2016,365), frequency=365)
-
 #Bitcoin2 <- subset(Bitcoin, date2 > "2014-8-31" & date2 < "2016-9-1")
-
-
 #BitcoinTimeSeries<- as.ts(Bitcoin)
 BitcoinTimeSeries
+head(BitcoinTimeSeries)
 tail(BitcoinTimeSeries)
 str(BitcoinTimeSeries)
 plot(BitcoinTimeSeries)
@@ -60,26 +54,21 @@ plot(BitcoinTimeSeries)
 
 
 ```{r}
-trainBitcoin<- window(BitcoinTimeSeries, start = c(2014,1), end= c(2016,1), frequency=365)
-testBitcoin<- window(BitcoinTimeSeries, start=c(2016,11), end = c(2016, 12), frequency = 365)
-
-rm(trainBitcoin)
-rm(testBitcoin)
+trainBitcoin<- window(BitcoinTimeSeries, start = c(2014,1), end= c(2016,305), frequency=365)
+testBitcoin<- window(BitcoinTimeSeries, start=c(2016,306), end = c(2016,365), frequency = 365)
 
 trainBitcoin
 plot(trainBitcoin)
-
 testBitcoin
 plot(testBitcoin)
-etsFit <- ets(trainBitcoin[ ,"close"], model = 'ZZZ', damped = FALSE)
-
-bitcointsFC <- forecast(etsFit, h = 60)
+etsFit <- ets(trainBitcoin, model = 'MAN', damped = FALSE)
+bitcointsFC <- forecast(etsFit, h = 61)
 autoplot(bitcointsFC, series = "Predicted", 
          xlab = "Time", ylab = "Price")
 #+ 
  # autolayer(Bitcoin, series = "Original")
 bitcointsFC
-accuracy(forecast(etsFit, h = 60), testBitcoin)
+accuracy(forecast(etsFit, h = 61), testBitcoin)
 ```
 
 Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
