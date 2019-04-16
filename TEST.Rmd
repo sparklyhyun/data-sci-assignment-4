@@ -19,7 +19,7 @@ cryptoDataTimeSeries
 str(cryptoDataTimeSeries)
 head(cryptoDataTimeSeries)
 tail(cryptoDataTimeSeries)
-Bitcoin <- subset(cryptoData2, symbol =="BTC" & date >= "2014-01-01" & date <= "2016-10-31")
+Bitcoin <- subset(cryptoData2, symbol =="BTC" & date >= "2014-01-01" & date <= "2018-11-30")
 write.csv(Bitcoin, "bitcoin.csv")
 Bitcoin <- read.csv("bitcoin.csv", header = TRUE)
 head(Bitcoin)
@@ -28,7 +28,7 @@ plot(Bitcoin$close)
 #class(Bitcoin$date)
 #Bitcoin$date2 <- as.Date(Bitcoin$date, "%d-%m-%y")
 #class(Bitcoin$date2)
-BitcoinTimeSeries<-ts(Bitcoin$open, start=c(2014,1), end=c(2016,365), frequency=365)
+BitcoinTimeSeries<-ts(Bitcoin$open, start=c(2014,1), end=c(2018,334), frequency=365)
 #Bitcoin2 <- subset(Bitcoin, date2 > "2014-8-31" & date2 < "2016-9-1")
 #BitcoinTimeSeries<- as.ts(Bitcoin)
 BitcoinTimeSeries
@@ -54,21 +54,65 @@ plot(BitcoinTimeSeries)
 
 
 ```{r}
-trainBitcoin<- window(BitcoinTimeSeries, start = c(2014,1), end= c(2016,305), frequency=365)
-testBitcoin<- window(BitcoinTimeSeries, start=c(2016,306), end = c(2016,365), frequency = 365)
+trainBitcoin<- window(BitcoinTimeSeries, start = c(2014,1), end= c(2018,334), frequency=365)
+#testBitcoin<- window(BitcoinTimeSeries, start=c(2018,335), end = c(2019,31), frequency = 365)
 
 trainBitcoin
 plot(trainBitcoin)
-testBitcoin
-plot(testBitcoin)
+#testBitcoin
+#plot(testBitcoin)
 etsFit <- ets(trainBitcoin, model = 'MAN', damped = FALSE)
-bitcointsFC <- forecast(etsFit, h = 61)
+bitcointsFC <- forecast(etsFit, h = 62)
 autoplot(bitcointsFC, series = "Predicted", 
          xlab = "Time", ylab = "Price")
 #+ 
  # autolayer(Bitcoin, series = "Original")
 bitcointsFC
-accuracy(forecast(etsFit, h = 61), testBitcoin)
+accuracy(forecast(etsFit, h = 62), testBitcoin)
+```
+
+```{r}
+
+cryptoData <- read.csv("crypto-markets.csv", header = TRUE)
+cryptoData2 <- subset(cryptoData, select = c("symbol", "date", "open", "close"))
+cryptoData2 <- as.data.frame.matrix(cryptoData2)
+
+#Bitcoin
+Bitcoin <- subset(cryptoData2, symbol =="BTC" & date >= "2014-01-01" & date <= "2018-11-29")
+head(Bitcoin)
+write.csv(Bitcoin, "bitcoin.csv")
+Bitcoin <- read.csv("bitcoin.csv", header = TRUE)
+BitcoinTimeSeriesOpen<-ts(Bitcoin$open, start=c(2014,1), end=c(2018,334), frequency=365)
+BitcoinTimeSeriesClose<-ts(Bitcoin$close, start=c(2014,1), end=c(2018,334), frequency=365)
+
+#Ethereum
+Ethereum <- subset(cryptoData2, symbol =="ETH" & date >= "2016-01-01" & date <= "2018-11-29")
+write.csv(Ethereum,"ethereum.csv")
+Ethereum <- read.csv("ethereum.csv",header=TRUE)
+EthereumTimeSeriesOpen<- ts(Ethereum$open, start=c(2016,1), end=c(2018,334), frequency=365)
+EthereumTimeSeriesOpen<- ts(Ethereum$open, start=c(2016,1), end=c(2018,334), frequency=365)
+
+#XRP
+XRP <- subset(cryptoData2, symbol =="XRP" & date >= "2014-01-01" & date <= "2018-11-29")
+write.csv(XRP,"XRP.csv")
+XRP <- read.csv("XRP.csv",header=TRUE)
+XRPTimeSeriesOpen<- ts(XRP$open, start=c(2014,1), end=c(2018,334), frequency=365)
+XRPTimeSeriesClose<- ts(XRP$close, start=c(2014,1), end=c(2018,334), frequency=365)
+
+#BitcoinCash
+BCash <- subset(cryptoData2, symbol =="BCH" & date >= "2017-07-23" & date <= "2018-11-29")
+write.csv(BCash,"BCash.csv")
+BCash <- read.csv("BCash.csv",header=TRUE)
+BCashTimeSeriesOpen<- ts(BCash$open, start=c(2017,204), end=c(2018,334), frequency=365)
+BCashTimeSeriesClose<- ts(BCash$close, start=c(2017,204), end=c(2018,334), frequency=365)
+
+#LiteCoin
+LiteCoin <- subset(cryptoData2, symbol =="LTC" & date >= "2014-01-01" & date <= "2018-11-29")
+write.csv(LiteCoin,"LiteCoin.csv")
+LiteCoin <- read.csv("LiteCoin.csv",header=TRUE)
+LiteCoinimeSeriesOpen<- ts(LiteCoin$open, start=c(2014,1), end=c(2018,334), frequency=365)
+LiteCoinTimeSeriesClose<- ts(LiteCoin$close, start=c(2014,1), end=c(2018,334), frequency=365)
+
 ```
 
 Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
