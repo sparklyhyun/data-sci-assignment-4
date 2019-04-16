@@ -15,24 +15,37 @@ cryptoData <- read.csv("crypto-markets.csv", header = TRUE)
 cryptoData2 <- subset(cryptoData, select = c("symbol", "date", "open", "close"))
 cryptoData2 <- as.data.frame.matrix(cryptoData2)
 frequency(cryptoData2)
-cryptoDataTimeSeries <- ts(cryptoData, frequency=1, start=c(2013), end=c(2018))
-cryptoDataTimeSeries
-str(cryptoDataTimeSeries)
-head(cryptoDataTimeSeries)
-tail(cryptoDataTimeSeries)
+#cryptoDataTimeSeries <- ts(cryptoData, frequency=1, start=c(2013), end=c(2018))
+#cryptoDataTimeSeries
+#str(cryptoDataTimeSeries)
+#head(cryptoDataTimeSeries)
+#tail(cryptoDataTimeSeries)
 
-Bitcoin <- subset(cryptoData2, symbol =="BTC" & date >= "2014-10-29" & date <= "2016-10-29")
+Bitcoin <- subset(cryptoData2, symbol =="BTC" & date >= "2014-1-1" & date <= "2016-12-31")
 write.csv(Bitcoin, "bitcoin.csv")
 Bitcoin <- read.csv("bitcoin.csv", header = TRUE)
 
-head(Bitcoin)
+tail(Bitcoin)
 Bitcoin
+plot(Bitcoin$open)
+
+class(Bitcoin$open)
+Bitcoin$open <- as.integer(Bitcoin$open)
+
+class(Bitcoin$open)
+
+minOpen <- min(Bitcoin$open)
+maxOpen <- max(Bitcoin$open)
+
+minOpen
+maxOpen
 
 #class(Bitcoin$date)
 #Bitcoin$date2 <- as.Date(Bitcoin$date, "%d-%m-%y")
 #class(Bitcoin$date2)
 
 BitcoinTimeSeries<-ts(Bitcoin$open, start=c(2014,1), end=c(2016,365), frequency=365)
+
 
 #Bitcoin2 <- subset(Bitcoin, date2 > "2014-8-31" & date2 < "2016-9-1")
 
@@ -60,20 +73,22 @@ plot(BitcoinTimeSeries)
 
 
 ```{r}
-trainBitcoin<- window(BitcoinTimeSeries, start = c(2014,1), end= c(2016,1), frequency=365)
-testBitcoin<- window(BitcoinTimeSeries, start=c(2016,11), end = c(2016, 12), frequency = 365)
+trainBitcoin<- window(BitcoinTimeSeries, start = c(2014,1), end= c(2016,304), frequency=304)
+testBitcoin<- window(BitcoinTimeSeries, start=c(2016,305), end = c(2016, 365), frequency = 60)
 
-rm(trainBitcoin)
-rm(testBitcoin)
+#trainBitcoin2<- window(BitcoinTimeSeries, start = c(2014,1), end= c(2016,365), frequency=304)
 
 trainBitcoin
 plot(trainBitcoin)
 
+#plot(trainBitcoin2)
+
 testBitcoin
 plot(testBitcoin)
-etsFit <- ets(trainBitcoin[ ,"close"], model = 'ZZZ', damped = FALSE)
+etsFit <- ets(trainBitcoin, model = 'ZZZ', damped = FALSE)
 
 bitcointsFC <- forecast(etsFit, h = 60)
+bitcointsFC
 autoplot(bitcointsFC, series = "Predicted", 
          xlab = "Time", ylab = "Price")
 #+ 
