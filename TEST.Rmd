@@ -27,11 +27,15 @@ Bitcoin <- read.csv("bitcoin.csv", header = TRUE)
 
 head(Bitcoin)
 Bitcoin
-class(Bitcoin$date)
-Bitcoin$date2 <- as.Date(Bitcoin$date, "%d-%m-%y")
-class(Bitcoin$date2)
 
-BitcoinTimeSeries<-ts(Bitcoin, frequency=365, start=c(2013,28), end=c(2018,11,29))
+
+bitcoin <- subset(cryptoData2, symbol =="BTC" & date >= "2016-11-29" & date <= "2018-11-29")
+
+#class(Bitcoin$date)
+#Bitcoin$date2 <- as.Date(Bitcoin$date, "%d-%m-%y")
+#class(Bitcoin$date2)
+
+BitcoinTimeSeries<-ts(bitcoin$open, start=c(2013,1), end=c(2016,365), frequency=365)
 
 
 #Bitcoin2 <- subset(Bitcoin, date2 > "2014-8-31" & date2 < "2016-9-1")
