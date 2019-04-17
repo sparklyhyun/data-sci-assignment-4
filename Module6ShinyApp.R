@@ -142,16 +142,22 @@ server <- function(input, output) {
     
   }
   
-  # Record the input forecast horizon
-  getHorizon <- reactive({ input$horizon })
+
   
   # Plot the prediction
   output$plot <- renderPlot({
     train<- window(getDataset(), start = getStart(), end= c(2018,334), frequency=365)
     etsFit <- ets(train, model = 'ZZZ', damped = FALSE)
-    tsFCOpen<- forecast(etsFit, h = 62)
-    autoplot(tsFCOpen, series = "Predicted", 
-             xlab = "Time", ylab = "Price")
+    tsFC<- forecast(etsFit, h = 62)
+    autoplot(tsFC, series = "Predicted", 
+             xlab = "Time", ylab = "Price")+
+      autolayer(meanf(getDataset(), h = 62),
+                series="Mean", PI=FALSE) +
+      autolayer(naive(getDataset(), h = 62),
+                series="Naïve", PI=FALSE) +
+      autolayer(rwf(getDataset(), h = 62, drift = TRUE),
+                series="Drift", PI=FALSE)
+    
     
   })
   
